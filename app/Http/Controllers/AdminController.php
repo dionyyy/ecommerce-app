@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class AdminController extends Controller
 {
-    public function login()
+    public function showLogin()
     {
         return Inertia::render('Admin/Login');
+    }
+
+    public function login(Request $request): RedirectResponse
+    {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'isAdmin' => true])) {
+            return redirect()->route('admin.dashboard');
+        }
     }
 
     public function index()
