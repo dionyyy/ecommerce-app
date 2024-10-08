@@ -12,29 +12,29 @@ import { Breadcrumb, Layout, Menu, theme } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
 
 type AdminLayoutProps = {
-    children: React.ReactNode
+    children: React.ReactNode,
+    user: { name: string; email: string };
 }
 
 type MenuItem = Required<MenuProps>['items'][number];
 
 const items: MenuItem[] = [
   { key: '1', icon: <PieChartOutlined />, label: 'Dashboard' },
-  { key: '2', icon: <DesktopOutlined />, label: 'Option 2' },
-  { key: '3', icon: <UserOutlined />, label: 'Option 3' },
+  { key: '2', icon: <DesktopOutlined />, label: 'Orders' },
+  { key: '3', icon: <UserOutlined />, label: 'Users' },
   {
-    key: 'sub1',
-    label: 'Navigation One',
+    key: '4',
+    label: 'Categories',
     icon: <TeamOutlined />,
     children: [
-      { key: '5', label: 'Option 5' },
       { key: '6', label: 'Option 6' },
       { key: '7', label: 'Option 7' },
       { key: '8', label: 'Option 8' },
     ],
   },
   {
-    key: 'sub2',
-    label: 'Navigation Two',
+    key: '5',
+    label: 'Products',
     icon: <FileOutlined />,
     children: [
       { key: '9', label: 'Option 9' },
@@ -51,7 +51,7 @@ const items: MenuItem[] = [
   },
 ];
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({children}) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({children, user}) => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -59,32 +59,41 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children}) => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-        <div className="demo-logo-vertical" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-      </Sider>
-      <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} />
-        <Content style={{ margin: '0 16px' }}>
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-          </Breadcrumb>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-           {children}
-          </div>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer>
-      </Layout>
+        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+            <div className="py-6 demo-logo-vertical">
+                <h2 className="text-center">Admin Panel</h2>
+            </div>
+            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        </Sider>
+        <Layout>
+            <Header style={{ padding: 0, background: colorBgContainer }}>
+                <div className="flex justify-between items-center px-4">
+                    <h2 className="text-lg"></h2>
+                    <div>
+                        <span className="mr-4">Welcome, {user?.name}</span>
+                    </div>
+                </div>
+            </Header>
+            <Content style={{ margin: '0 16px' }}>
+                <Breadcrumb style={{ margin: '16px 0' }}>
+                    <Breadcrumb.Item>Admin</Breadcrumb.Item>
+                    <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                </Breadcrumb>
+                <div
+                    style={{
+                    padding: 24,
+                    minHeight: 360,
+                    background: colorBgContainer,
+                    borderRadius: borderRadiusLG,
+                    }}
+                >
+                    {children}
+                </div>
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>
+                Ant Design ©{new Date().getFullYear()} Created by Ant UED
+            </Footer>
+        </Layout>
     </Layout>
   );
 };
