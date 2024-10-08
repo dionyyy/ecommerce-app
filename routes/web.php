@@ -15,10 +15,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::prefix('admin')->middleware('auth')->group(function() {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-});
-
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -27,6 +23,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+/** Admin Routes */
+
+Route::get('/admin-login', [AdminController::class, 'login'])->name('admin.login');
+
+Route::prefix('admin')->middleware('auth')->group(function() {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
 require __DIR__.'/auth.php';
