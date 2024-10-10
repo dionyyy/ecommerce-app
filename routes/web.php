@@ -28,8 +28,8 @@ Route::middleware('auth')->group(function () {
 
 /** Admin Routes */
 
-Route::get('/admin-login', [AdminController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin-login', [AdminController::class, 'login'])->name('admin.login.post');
+Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.post');
 
 Route::prefix('admin')->middleware('auth')->group(function() {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
