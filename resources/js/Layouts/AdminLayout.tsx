@@ -20,21 +20,20 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 const items: MenuItem[] = [
   { key: '1', icon: <PieChartOutlined />, label: 'Dashboard' },
-  { key: '2', icon: <DesktopOutlined />, label: 'Orders' },
-  { key: '3', icon: <UserOutlined />, label: 'Users' },
+  { key: '2', icon: <DesktopOutlined />, label: 'Products' },
+  { key: '3', icon: <FileOutlined />, label: 'Orders' },
   {
     key: '4',
-    label: 'Categories',
-    icon: <TeamOutlined />,
+    label: 'Users Management',
+    icon: <UserOutlined />,
     children: [
-      { key: '6', label: 'Option 6' },
-      { key: '7', label: 'Option 7' },
-      { key: '8', label: 'Option 8' },
+      { key: '6', label: 'Users' },
+      { key: '7', label: 'Customers' },
     ],
   },
   {
     key: '5',
-    label: 'Products',
+    label: 'Reports',
     icon: <FileOutlined />,
     children: [
       { key: '9', label: 'Option 9' },
@@ -59,7 +58,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children, user}) => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={300}>
             <div className="py-6 demo-logo-vertical">
                 <h2 className="text-center">Admin Panel</h2>
             </div>
