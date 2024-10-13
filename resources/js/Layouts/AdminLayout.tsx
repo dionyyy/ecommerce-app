@@ -1,4 +1,4 @@
-import React, { Children, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DesktopOutlined,
   FileOutlined,
@@ -6,55 +6,62 @@ import {
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Link as InertiaLink, usePage } from '@inertiajs/react';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 type AdminLayoutProps = {
     children: React.ReactNode,
-    user: { name: string; email: string };
+    user?: { name: string; email: string };
 }
 
-type MenuItem = Required<MenuProps>['items'][number];
-
-const items: MenuItem[] = [
-  { key: '1', icon: <PieChartOutlined />, label: 'Dashboard' },
-  { key: '2', icon: <DesktopOutlined />, label: 'Products' },
-  { key: '3', icon: <FileOutlined />, label: 'Orders' },
-  {
-    key: '4',
-    label: 'Users Management',
-    icon: <UserOutlined />,
-    children: [
-      { key: '6', label: 'Users' },
-      { key: '7', label: 'Customers' },
-    ],
-  },
-  {
-    key: '5',
-    label: 'Reports',
-    icon: <FileOutlined />,
-    children: [
-      { key: '9', label: 'Option 9' },
-      { key: '10', label: 'Option 10' },
-      {
-        key: 'sub3',
-        label: 'Submenu',
-        children: [
-          { key: '11', label: 'Option 11' },
-          { key: '12', label: 'Option 12' },
-        ],
-      },
-    ],
-  },
+const items = [
+    { key: '/admin/dashboard', icon: <PieChartOutlined />, label: <InertiaLink href="/admin/dashboard">Dashboard</InertiaLink> },
+    { key: '/admin/products', icon: <DesktopOutlined />, label: <InertiaLink href="/admin/products">Products</InertiaLink> },
+    { key: '/admin/orders', icon: <FileOutlined />, label: <InertiaLink href="/admin/orders">Orders</InertiaLink> },
+    {
+      key: '/admin/users-management',
+      label: 'Users Management',
+      icon: <UserOutlined />,
+      children: [
+        { key: '/admin/users', label: <InertiaLink href="/admin/users">Users</InertiaLink> },
+        { key: '/admin/customers', label: <InertiaLink href="/admin/customers">Customers</InertiaLink> },
+      ],
+    },
+    {
+      key: '/admin/reports',
+      label: 'Reports',
+      icon: <FileOutlined />,
+      children: [
+        { key: '/admin/reports/option9', label: <InertiaLink href="/admin/reports/option9">Option 9</InertiaLink> },
+        { key: '/admin/reports/option10', label: <InertiaLink href="/admin/reports/option10">Option 10</InertiaLink> },
+      ],
+    },
 ];
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({children, user}) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+  const user = usePage().props.auth.user;
   const [collapsed, setCollapsed] = useState(false);
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  useEffect(() => {
+     const path = window.location.pathname;
+     const parentKey = items.find(item => 
+       item.children?.some(child => child.key === path)
+     )?.key;
+     
+     if (parentKey) {
+       setOpenKeys([parentKey]);
+     }
+  }, [])
+
+  const onOpenChange = (keys: string[]) => {
+    setOpenKeys(keys);
+  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -62,7 +69,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children, user}) => {
             <div className="py-6 demo-logo-vertical">
                 <h2 className="text-center">Admin Panel</h2>
             </div>
-            <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+            <Menu
+                theme="dark"
+                defaultSelectedKeys={['/admin/dashboard']}
+                mode="inline"
+                items={items}
+                selectedKeys={[window.location.pathname]}
+                openKeys={openKeys}
+                onOpenChange={onOpenChange}
+            />
         </Sider>
         <Layout>
             <Header style={{ padding: 0, background: colorBgContainer }}>
@@ -80,10 +95,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({children, user}) => {
                 </Breadcrumb>
                 <div
                     style={{
-                    padding: 24,
-                    minHeight: 360,
-                    background: colorBgContainer,
-                    borderRadius: borderRadiusLG,
+                      padding: 24,
+                      minHeight: 360,
+                      background: colorBgContainer,
+                      borderRadius: borderRadiusLG,
                     }}
                 >
                     {children}
