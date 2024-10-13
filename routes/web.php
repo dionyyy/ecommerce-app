@@ -34,7 +34,11 @@ Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.logi
 
 Route::prefix('admin')->middleware('auth')->group(function() {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+    /** USERS */
     Route::get('/users', [UserController::class, 'index'])->name('admin.user.index');
+    Route::post('/users', [UserController::class, 'store'])->name('admin.user.store');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.user.update');
 });
 
 require __DIR__.'/auth.php';
