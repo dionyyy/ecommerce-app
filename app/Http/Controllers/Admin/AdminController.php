@@ -7,14 +7,21 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AdminController extends Controller
 {
-    public function showLogin()
+    /**
+     * Show admin login form
+     */
+    public function showLogin(): Response
     {
         return Inertia::render('Admin/Login');
     }
 
+    /**
+     * Authenticate Admin
+     */
     public function login(Request $request): RedirectResponse
     {
         $request->validate([
@@ -29,10 +36,13 @@ class AdminController extends Controller
         return back()->withErrors(['email' => 'Invalid credentials provided.'])->withInput();
     }
 
-    public function index()
+    /**
+     * Show Admin dashboard
+     */
+    public function index(): Response
     {
         return Inertia::render('Admin/Dashboard', [
-            'user' => Auth::user()
-        ]);
+           'user' => Auth::user()
+        ]); 
     }
 }

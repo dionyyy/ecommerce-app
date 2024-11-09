@@ -4,19 +4,27 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class UserController extends Controller
 {
-    public function index()
+    /**
+     * Display Users Table
+     */
+    public function index(): Response
     {
         return Inertia::render('Admin/User/Index', [
             'users' => User::all()->filter(fn ($item) => !$item->isAdmin)->values()->toArray(),
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * Save user model 
+     */
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -33,7 +41,10 @@ class UserController extends Controller
         return back()->with('success', 'User created successfully.');
     }
 
-    public function update(User $user, Request $request)
+    /**
+     * Update user model
+     */
+    public function update(User $user, Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
