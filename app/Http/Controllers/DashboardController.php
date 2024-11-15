@@ -23,4 +23,11 @@ class DashboardController extends Controller
             'products' => Product::all()
         ]);
     }
+
+    public function showWelcomePage(): Response
+    {
+        return Inertia::render('Welcome', [
+            'products' => Product::all(),
+        ]);
+    }
 }
