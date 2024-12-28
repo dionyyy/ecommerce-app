@@ -11,7 +11,7 @@ type ProductCardProps = {
         published: boolean;
         updated_at: string;
     };
-    onAddToCart: (productId: number) => void;
+    onAddToCart: (product: ProductCardProps["product"]) => void;
 };
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
@@ -31,7 +31,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                     ${parseFloat(product.price).toFixed(2)}
                 </span>
                 <button
-                    onClick={() => onAddToCart(product.id)}
+                    onClick={() => onAddToCart(product)}
                     className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-500"
                 >
                     Add to Cart
