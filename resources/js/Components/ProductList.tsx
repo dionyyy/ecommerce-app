@@ -1,5 +1,7 @@
 import React from 'react';
 import ProductCard from './ProductCard';
+import { FaShoppingCart } from 'react-icons/fa';
+import { Link } from '@inertiajs/react';
 
 type ProductData = {
     id: number;
@@ -14,7 +16,7 @@ type ProductData = {
 
 type ProductListProps = {
     products: ProductData[];
-    onAddToCart: (productId: number) => void;
+    onAddToCart: (product: ProductData) => void;
 };
 
 export default function ProductList({ products, onAddToCart }: ProductListProps) {
@@ -22,9 +24,13 @@ export default function ProductList({ products, onAddToCart }: ProductListProps)
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold">Products</h3>
-                <button className="relative inline-flex items-center p-2 bg-gray-800 text-white rounded-md hover:bg-gray-700">
-                    <span className="ml-2">Cart</span>
-                </button>
+                <Link
+                    href="/cart"
+                    className="flex items-center px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                >
+                    <FaShoppingCart className="mr-2" />
+                    Go to Cart
+                </Link>
             </div>
 
             <div className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
