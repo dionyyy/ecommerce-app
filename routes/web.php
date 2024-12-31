@@ -20,6 +20,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    /** Cart Routes */
+    Route::get('/cart', [DashboardController::class, 'showCartPage'])->name('cart');
+    Route::post('/checkout', [OrderController::class, 'store'])->name('checkout');
 });
 
 

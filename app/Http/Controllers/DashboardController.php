@@ -12,8 +12,11 @@ class DashboardController extends Controller
 {
     public function index(): Response
     {
+        $customer = auth()->user()->customer()->with('addresses')->first();
+
         return Inertia::render('Dashboard', [
             'products' => Product::all(),
+            'customer' => $customer,
         ]);
     }
 
@@ -29,5 +32,10 @@ class DashboardController extends Controller
         return Inertia::render('Welcome', [
             'products' => Product::all(),
         ]);
+    }
+
+    public function showCartPage(): Response
+    {
+        return Inertia::render('Cart');
     }
 }
