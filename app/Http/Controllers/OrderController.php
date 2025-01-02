@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,6 +15,12 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+        ]);
+
         $order = Order::create($request->all());
         return redirect()->route('orders.show', $order);
     }
