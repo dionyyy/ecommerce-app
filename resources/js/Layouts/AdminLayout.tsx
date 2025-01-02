@@ -105,7 +105,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 </div>
             </Content>
             <Footer style={{ textAlign: 'center' }}>
-                Ant Design ©{new Date().getFullYear()} Created by Ant UED
+                Ant Design ©{new Date().getFullYear()} Created by DonFaqundo
             </Footer>
         </Layout>
     </Layout>
