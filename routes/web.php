@@ -6,9 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', [DashboardController::class, 'showWelcomePage'])->name('welcome');
 
@@ -23,6 +21,7 @@ Route::middleware('auth')->group(function () {
 
     /** Cart Routes */
     Route::get('/cart', [DashboardController::class, 'showCartPage'])->name('cart');
+    Route::get('/checkout', [DashboardController::class, 'showCheckoutPage'])->name('checkout.page');
     Route::post('/checkout', [OrderController::class, 'store'])->name('checkout');
 });
 
