@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type CartItemData = {
   id: string;
@@ -19,9 +21,9 @@ const Checkout: React.FC = () => {
     }
   }, []);
 
-  const { data, setData, post, errors } = useForm({
-    firstName: '',
-    lastName: '',
+  const { data, setData, post, errors, reset } = useForm({
+    first_name: '',
+    last_name: '',
     phone: '',
     address: '',
     city: '',
@@ -38,7 +40,9 @@ const Checkout: React.FC = () => {
     e.preventDefault();
     post('/checkout', {
       onSuccess: () => {
-        alert('Checkout successful!');
+        toast.success('Order placed successfully!');
+        reset();
+        setCartItems([]);
         localStorage.removeItem('cart');
       },
     });
@@ -49,6 +53,7 @@ const Checkout: React.FC = () => {
       header={<h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Checkout</h2>}
     >
       <Head title="Checkout" />
+      <ToastContainer />
       <div className="flex flex-col items-center justify-center mt-5 space-y-6">
         <div className="w-full max-w-2xl bg-gray-800 shadow-md rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">Shipping Details</h2>
@@ -57,21 +62,21 @@ const Checkout: React.FC = () => {
               <label className="mt-3 block text-sm font-medium text-gray-600 dark:text-gray-400">First Name</label>
               <input
                 type="text"
-                value={data.firstName}
-                onChange={(e) => setData('firstName', e.target.value)}
+                value={data.first_name}
+                onChange={(e) => setData('first_name', e.target.value)}
                 className="w-full p-2 mt-1 border border-gray-300 dark:border-gray-600 rounded dark:bg-gray-700 dark:text-gray-200"
               />
-              {errors.firstName && <p className="text-red-600">{errors.firstName}</p>}
+              {errors.first_name && <p className="text-red-600">{errors.first_name}</p>}
             </div>
             <div>
               <label className="mt-3 block text-sm font-medium text-gray-600 dark:text-gray-400">Last Name</label>
               <input
                 type="text"
-                value={data.lastName}
-                onChange={(e) => setData('lastName', e.target.value)}
+                value={data.last_name}
+                onChange={(e) => setData('last_name', e.target.value)}
                 className="w-full p-2 mt-1 border border-gray-300 dark:border-gray-600 rounded dark:bg-gray-700 dark:text-gray-200"
               />
-              {errors.lastName && <p className="text-red-600">{errors.lastName}</p>}
+              {errors.last_name && <p className="text-red-600">{errors.last_name}</p>}
             </div>
             <div>
               <label className="mt-3 block text-sm font-medium text-gray-600 dark:text-gray-400">Phone</label>
