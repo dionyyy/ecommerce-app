@@ -38,4 +38,9 @@ class DashboardController extends Controller
     {
         return Inertia::render('Cart');
     }
+
+    public function showCheckoutPage(): Response
+    {
+        return Inertia::render('Checkout');
+    }
 }
