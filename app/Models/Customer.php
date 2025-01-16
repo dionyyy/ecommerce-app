@@ -9,6 +9,8 @@ class Customer extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function addresses()
     {
         return $this->hasOne(CustomerAddress::class, 'customer_id');
