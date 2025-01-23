@@ -4,10 +4,10 @@ namespace App\Enums;
 
 enum Categories: string
 {
-    case Audio = 'Audio';
-    case Wearables = 'Wearables';
-    case Cameras = 'Cameras';
-    case Accessories = 'Accessories';
-    case SmartPhones = 'Smart Phones';
-    case Computers = 'Computers';
+    case AUDIO = 'Audio';
+    case WEARABLES = 'Wearables';
+    case CAMERAS = 'Cameras';
+    case ACCESSORIES = 'Accessories';
+    case SMART_PHONES = 'Smart Phones';
+    case COMPUTERS = 'Computers';
 }
