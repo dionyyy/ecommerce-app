@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Categories;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
@@ -42,7 +43,9 @@ class ProductController extends Controller
             'price' => $request->price,
             'created_by' => $request->user()->id,
             'updated_by' => $request->user()->id,
-            'published' => $request->published
+            'published' => $request->published,
+            'ratings' => $request->ratings,
+            'category' => Categories::of($request->category),
         ]);
 
         if ($request->hasFile('image')) {
