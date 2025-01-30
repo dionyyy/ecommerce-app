@@ -3,9 +3,10 @@ import DataTable from '@/Components/DataTable'
 import AdminLayout from '@/Layouts/AdminLayout'
 import { PageProps } from '@/types'
 import { useForm, usePage } from '@inertiajs/react'
-import { Button, Checkbox, Form, Input, Modal } from 'antd'
+import { Button, Checkbox, Form, Input, Modal, Select } from 'antd'
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Categories } from '@/Utils/Constants/Transactions'
 
 type ProductData = {
     id: number,
@@ -83,10 +84,12 @@ const Index: React.FC = () => {
         description: '',
         price: '',
         published: false,
+        category: '',
+        ratings: '',
     });
 
     const showAddModal = () => {
-        setData({ title: '', image: null, description: '', price: '', published: false });
+        setData({ title: '', image: null, description: '', price: '', published: false, category: '', ratings: '' });
         setIsAddModalVisible(true);
     };
 
@@ -112,8 +115,8 @@ const Index: React.FC = () => {
         setIsAddModalVisible(false);
         reset();
 
-         /** Reset file input for image */
-         if (fileInputRef.current) {
+        /** Reset file input for image */
+        if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
     };
@@ -128,14 +131,14 @@ const Index: React.FC = () => {
         <AdminLayout>
             <div>
                 <div className="flex justify-between items-center">
-                <h1 className='my-10'>Products List</h1>
-                <Button
-                    type="primary"
-                    style={{ marginRight: 10 }}
-                    onClick={showAddModal}
-                >
-                    Add Product
-                </Button>
+                    <h1 className='my-10'>Products List</h1>
+                    <Button
+                        type="primary"
+                        style={{ marginRight: 10 }}
+                        onClick={showAddModal}
+                    >
+                        Add Product
+                    </Button>
                 </div>
                 <DataTable
                     columns={columns}
@@ -201,6 +204,27 @@ const Index: React.FC = () => {
                             <Input
                                 value={data.price}
                                 onChange={(e) => setData('price', e.target.value)}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Ratings"
+                            validateStatus={errors.ratings && 'error'}
+                            help={errors.ratings}
+                        >
+                            <Input
+                                value={data.ratings}
+                                onChange={(e) => setData('ratings', e.target.value)}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Category"
+                            validateStatus={errors.category && 'error'}
+                            help={errors.category}
+                        >
+                            <Select
+                                options={Object.entries(Categories).map(([key, value]) => ({ label: key, value: value }))}
+                                value={data.category}
+                                onChange={(value) => setData('category', value)}
                             />
                         </Form.Item>
                         <Checkbox
