@@ -1,179 +1,91 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import React from 'react';
+import { ShoppingCart, Heart, Search, Menu, LogOut } from 'lucide-react';
+import { Link, usePage, router } from '@inertiajs/react';
 
-export default function Authenticated({
-    header,
-    children,
-}: PropsWithChildren<{ header?: ReactNode }>) {
+type LayoutProps = {
+    children: React.ReactNode;
+}
+
+export default function AuthenticatedLayout({ children }: LayoutProps) {
     const user = usePage().props.auth.user;
-
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
-
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav className="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                                </Link>
-                            </div>
-
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink
-                                    href={route('dashboard')}
-                                    active={route().current('dashboard')}
-                                >
-                                    Dashboard
-                                </NavLink>
-                            </div>
+        <div className="min-h-screen bg-white">
+            <nav className="bg-white shadow-sm sticky top-0 z-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center h-16">
+                        <div className="flex items-center">
+                            <Menu className="h-6 w-6 mr-4 lg:hidden" />
+                            <Link href={user ? "/dashboard" : "/"} className="text-2xl font-bold text-gray-900">TechStore</Link>
                         </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
+                        <div className="hidden lg:flex items-center space-x-8">
+                            {/* <Link href="/" className="text-gray-700 hover:text-gray-900">Home</Link>
+                            <Link href="/shop" className="text-gray-700 hover:text-gray-900">Shop</Link>
+                            <Link href="/categories" className="text-gray-700 hover:text-gray-900">Categories</Link>
+                            <Link href="/about" className="text-gray-700 hover:text-gray-900">About</Link> */}
                         </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
+                        <div className="flex items-center space-x-4">
+                            <Search className="h-6 w-6 text-gray-600 cursor-pointer" />
+                            <Heart className="h-6 w-6 text-gray-600 cursor-pointer" />
+                            <ShoppingCart onClick={() => router.visit("/cart")} className="h-6 w-6 text-gray-600 cursor-pointer" />
                             <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
+                                className="flex items-center space-x-1 text-gray-600 hover:text-gray-900"
+                                onClick={() => {
+                                    router.post(route('logout'));
+                                }}
                             >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
+                                <LogOut className="h-6 w-6" />
+                                <span className="hidden sm:inline">Logout</span>
                             </button>
                         </div>
                     </div>
                 </div>
-
-                <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            href={route('dashboard')}
-                            active={route().current('dashboard')}
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
+            </nav>
+            {children}
+            <footer className="bg-gray-900 text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div>
+                            <h4 className="text-lg font-semibold mb-4">About Us</h4>
+                            <p className="text-gray-400">Your trusted source for the latest tech and gadgets.</p>
+                        </div>
+                        <div>
+                            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+                            <ul className="space-y-2">
+                                <li><Link href="/" className="text-gray-400 hover:text-white">Shop</Link></li>
+                                <li><Link href="/" className="text-gray-400 hover:text-white">Categories</Link></li>
+                                <li><Link href="/" className="text-gray-400 hover:text-white">About</Link></li>
+                                <li><Link href="/" className="text-gray-400 hover:text-white">Contact</Link></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="text-lg font-semibold mb-4">Customer Service</h4>
+                            <ul className="space-y-2">
+                                <li><Link href="/" className="text-gray-400 hover:text-white">FAQ</Link></li>
+                                <li><Link href="/" className="text-gray-400 hover:text-white">Shipping</Link></li>
+                                <li><Link href="/" className="text-gray-400 hover:text-white">Returns</Link></li>
+                                <li><Link href="/" className="text-gray-400 hover:text-white">Track Order</Link></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
+                            <p className="text-gray-400 mb-4">Subscribe to get special offers and updates.</p>
+                            <div className="flex">
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    className="flex-1 px-4 py-2 rounded-l-md text-gray-900"
+                                />
+                                <button className="bg-white text-gray-900 px-4 py-2 rounded-r-md hover:bg-gray-100">
+                                    Subscribe
+                                </button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800 dark:text-gray-200">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
+                    <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                        <p>&copy; 2024 TechStore. All rights reserved.</p>
                     </div>
                 </div>
-            </nav>
-
-            {header && (
-                <header className="bg-white shadow dark:bg-gray-800">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
-                </header>
-            )}
-
-            <main>{children}</main>
+            </footer>
         </div>
     );
 }
