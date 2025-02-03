@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
+    DesktopOutlined,
+    FileOutlined,
+    PieChartOutlined,
+    TeamOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { Link as InertiaLink, usePage } from '@inertiajs/react';
@@ -21,95 +21,95 @@ const items = [
     { key: '/admin/products', icon: <DesktopOutlined />, label: <InertiaLink href="/admin/products">Products</InertiaLink> },
     { key: '/admin/orders', icon: <FileOutlined />, label: <InertiaLink href="/admin/orders">Orders</InertiaLink> },
     {
-      key: '/admin/users-management',
-      label: 'Users Management',
-      icon: <UserOutlined />,
-      children: [
-        { key: '/admin/users', label: <InertiaLink href="/admin/users">Users</InertiaLink> },
-        { key: '/admin/customers', label: <InertiaLink href="/admin/customers">Customers</InertiaLink> },
-      ],
+        key: '/admin/users-management',
+        label: 'Users Management',
+        icon: <UserOutlined />,
+        children: [
+            { key: '/admin/users', label: <InertiaLink href="/admin/users">Users</InertiaLink> },
+            { key: '/admin/customers', label: <InertiaLink href="/admin/customers">Customers</InertiaLink> },
+        ],
     },
     {
-      key: '/admin/reports',
-      label: 'Reports',
-      icon: <FileOutlined />,
-      children: [
-        { key: '/admin/reports/option9', label: <InertiaLink href="/admin/reports/option9">Option 9</InertiaLink> },
-        { key: '/admin/reports/option10', label: <InertiaLink href="/admin/reports/option10">Option 10</InertiaLink> },
-      ],
+        key: '/admin/reports',
+        label: 'Reports',
+        icon: <FileOutlined />,
+        children: [
+            { key: '/admin/reports/option9', label: <InertiaLink href="/admin/reports/option9">Option 9</InertiaLink> },
+            { key: '/admin/reports/option10', label: <InertiaLink href="/admin/reports/option10">Option 10</InertiaLink> },
+        ],
     },
 ];
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
-  const user = usePage().props.auth.user;
-  const [collapsed, setCollapsed] = useState(false);
-  const [openKeys, setOpenKeys] = useState<string[]>([]);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+    const user = usePage().props.auth.user;
+    const [collapsed, setCollapsed] = useState(false);
+    const [openKeys, setOpenKeys] = useState<string[]>([]);
+    const {
+        token: { colorBgContainer, borderRadiusLG },
+    } = theme.useToken();
 
-  useEffect(() => {
-     const path = window.location.pathname;
-     const parentKey = items.find(item => 
-       item.children?.some(child => child.key === path)
-     )?.key;
-     
-     if (parentKey) {
-       setOpenKeys([parentKey]);
-     }
-  }, [])
+    useEffect(() => {
+        const path = window.location.pathname;
+        const parentKey = items.find(item =>
+            item.children?.some(child => child.key === path)
+        )?.key;
 
-  const onOpenChange = (keys: string[]) => {
-    setOpenKeys(keys);
-  };
+        if (parentKey) {
+            setOpenKeys([parentKey]);
+        }
+    }, [])
 
-  return (
-    <Layout style={{ minHeight: '100vh' }}>
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={300}>
-            <div className="py-6 demo-logo-vertical">
-                <h2 className="text-center">Admin Panel</h2>
-            </div>
-            <Menu
-                theme="dark"
-                defaultSelectedKeys={['/admin/dashboard']}
-                mode="inline"
-                items={items}
-                selectedKeys={[window.location.pathname]}
-                openKeys={openKeys}
-                onOpenChange={onOpenChange}
-            />
-        </Sider>
-        <Layout>
-            <Header style={{ padding: 0, background: colorBgContainer }}>
-                <div className="flex justify-between items-center px-4">
-                    <h2 className="text-lg"></h2>
-                    <div>
-                        <span className="mr-4">Welcome, {user?.name}</span>
+    const onOpenChange = (keys: string[]) => {
+        setOpenKeys(keys);
+    };
+
+    return (
+        <Layout style={{ minHeight: '100vh' }}>
+            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={300}>
+                <div className="py-6 demo-logo-vertical">
+                    <h2 className="text-center">Admin Panel</h2>
+                </div>
+                <Menu
+                    theme="dark"
+                    defaultSelectedKeys={['/admin/dashboard']}
+                    mode="inline"
+                    items={items}
+                    selectedKeys={[window.location.pathname]}
+                    openKeys={openKeys}
+                    onOpenChange={onOpenChange}
+                />
+            </Sider>
+            <Layout>
+                <Header style={{ padding: 0, background: colorBgContainer }}>
+                    <div className="flex justify-between items-center px-4">
+                        <h2 className="text-lg"></h2>
+                        <div>
+                            <span className="mr-4">Welcome, {user?.name}</span>
+                        </div>
                     </div>
-                </div>
-            </Header>
-            <Content style={{ margin: '0 16px' }}>
-                <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>Admin</Breadcrumb.Item>
-                    <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                </Breadcrumb>
-                <div
-                    style={{
-                      padding: 24,
-                      minHeight: 360,
-                      background: colorBgContainer,
-                      borderRadius: borderRadiusLG,
-                    }}
-                >
-                    {children}
-                </div>
-            </Content>
-            <Footer style={{ textAlign: 'center' }}>
-                Ant Design ©{new Date().getFullYear()} Created by DonFaqundo
-            </Footer>
+                </Header>
+                <Content style={{ margin: '0 16px' }}>
+                    <Breadcrumb style={{ margin: '16px 0' }}>
+                        <Breadcrumb.Item>Admin</Breadcrumb.Item>
+                        <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    </Breadcrumb>
+                    <div
+                        style={{
+                            padding: 24,
+                            minHeight: 360,
+                            background: colorBgContainer,
+                            borderRadius: borderRadiusLG,
+                        }}
+                    >
+                        {children}
+                    </div>
+                </Content>
+                <Footer style={{ textAlign: 'center' }}>
+                    Ant Design ©{new Date().getFullYear()} Created by DonFaqundo
+                </Footer>
+            </Layout>
         </Layout>
-    </Layout>
-  );
+    );
 };
 
 export default AdminLayout;
