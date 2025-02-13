@@ -11,6 +11,7 @@ type CartItemData = {
 
 const Cart: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItemData[]>([]);
+    const [totalPrice, setTotalPrice] = useState<number>(0);
 
     useEffect(() => {
         const storedCart = localStorage.getItem('cart');
@@ -20,14 +21,21 @@ const Cart: React.FC = () => {
         }
     }, []);
 
+    useEffect(() => {
+        setTotalPrice(cartItems.reduce(
+            (acc, item) => acc + parseFloat(item.price) * item.quantity,
+            0
+        ));
+    }, [cartItems]);
+
     const handleQuantityChange = (id: string, quantity: number) => {
         setCartItems((prevItems) => {
             const updatedItems = prevItems.map((item) =>
                 item.id === id
                     ? {
-                          ...item,
-                          quantity,
-                      }
+                        ...item,
+                        quantity,
+                    }
                     : item
             );
             localStorage.setItem('cart', JSON.stringify(updatedItems));
@@ -43,26 +51,14 @@ const Cart: React.FC = () => {
         });
     };
 
-    const handleSubmit = () => {
-        router.visit('/checkout', {
-            method: 'get',
-        });
-    };
-
     return (
-        <AuthenticatedLayout
-            header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                    E-commerce Cart
-                </h2>
-            }
-        >
+        <AuthenticatedLayout>
             <Head title="Cart" />
             <div className="flex flex-col items-center justify-center mt-5 space-y-6">
-                <div className="w-full max-w-2xl bg-gray-800 shadow-md rounded-lg p-6">
-                    <h2 className="text-2xl font-bold my-5 text-gray-800 dark:text-gray-200">Shopping Cart</h2>
+                <div className="w-full max-w-2xl bg-gray shadow-md rounded-lg p-6 my-5">
+                    <h2 className="text-2xl font-bold my-5 text-gray-900">Shopping Cart</h2>
                     {cartItems.length === 0 ? (
-                        <p className="text-center text-gray-600 dark:text-gray-400">Your cart is empty</p>
+                        <p className="text-center text-gray-400">Your cart is empty</p>
                     ) : (
                         <>
                             <ul className="space-y-4">
@@ -72,16 +68,16 @@ const Cart: React.FC = () => {
                                         className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded"
                                     >
                                         <div>
-                                            <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200">
+                                            <h3 className="text-lg font-medium text-gray-900">
                                                 {item.title}
                                             </h3>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                                            <p className="text-sm text-gray-900">
                                                 Price: ${item.price}
                                             </p>
                                             <div className="flex items-center mt-2 space-x-2">
                                                 <label
                                                     htmlFor={`quantity-${item.id}`}
-                                                    className="text-sm text-gray-600 dark:text-gray-400"
+                                                    className="text-sm text-gray-900"
                                                 >
                                                     Quantity:
                                                 </label>
@@ -110,15 +106,8 @@ const Cart: React.FC = () => {
                                 ))}
                             </ul>
                             <div className="flex justify-between mt-6">
-                                <p className="text-md font-medium text-gray-800 dark:text-gray-200">
-                                    Subtotal: $
-                                    {cartItems
-                                        .reduce(
-                                            (acc, item) =>
-                                                acc + parseFloat(item.price) * item.quantity,
-                                            0
-                                        )
-                                        .toFixed(2)}
+                                <p className="text-md font-medium text-gray-900">
+                                    Subtotal: ${totalPrice.toFixed(2)}
                                 </p>
                             </div>
                         </>
@@ -127,7 +116,7 @@ const Cart: React.FC = () => {
                     {/* Submit Button */}
                     <div className="flex justify-between mt-10">
                         <button
-                            className="px-4 py-2 text-white bg-gray-500 hover:bg-blue-700 rounded"
+                            className="px-4 py-2 text-white bg-gray-900 hover:bg-gray-800 rounded"
                             onClick={() => {
                                 router.visit("/dashboard")
                             }}
@@ -137,7 +126,7 @@ const Cart: React.FC = () => {
 
                         <button
                             className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded"
-                            onClick={handleSubmit}
+                            onClick={() => router.visit('/checkout')}
                         >
                             Proceed to Checkout
                         </button>
