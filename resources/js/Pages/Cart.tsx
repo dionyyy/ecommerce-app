@@ -91,7 +91,7 @@ const Cart: React.FC = () => {
                                                             Math.max(1, parseInt(e.target.value) || 1)
                                                         )
                                                     }
-                                                    className="w-16 p-2 border border-gray-300 dark:border-gray-600 rounded dark:bg-gray-700 dark:text-gray-200"
+                                                    className="w-16 p-2 border border-gray-300"
                                                     min="1"
                                                 />
                                             </div>
