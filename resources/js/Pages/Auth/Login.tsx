@@ -1,6 +1,7 @@
 import React, { FormEventHandler, useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import InputError from '@/Components/InputError';
 
 export default function Login() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -55,6 +56,7 @@ export default function Login() {
                                     placeholder="you@example.com"
                                 />
                             </div>
+                            <InputError message={errors.email} className="mt-2" />
                         </div>
 
                         <div>
@@ -77,6 +79,7 @@ export default function Login() {
                                     placeholder="••••••••"
                                 />
                             </div>
+                            <InputError message={errors.email} className="mt-2" />
                         </div>
 
                         <div className="flex items-center justify-between">
