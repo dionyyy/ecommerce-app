@@ -24,46 +24,9 @@ type ProductsProps = {
     products: ProductData[]
 }
 
-type Product = {
-    id: number;
-    name: string;
-    price: number;
-    image: string;
-    rating: number;
-}
-
-const featuredProducts: Product[] = [
-    {
-        id: 1,
-        name: "Premium Wireless Headphones",
-        price: 299.99,
-        image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
-        rating: 4.8
-    },
-    {
-        id: 2,
-        name: "Smart Watch Series X",
-        price: 399.99,
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80",
-        rating: 4.9
-    },
-    {
-        id: 3,
-        name: "Professional Camera Kit",
-        price: 1299.99,
-        image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=800&q=80",
-        rating: 4.7
-    },
-    {
-        id: 4,
-        name: "Designer Sunglasses",
-        price: 199.99,
-        image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?auto=format&fit=crop&w=800&q=80",
-        rating: 4.6
-    }
-];
 
 export default function Welcome() {
+    const { products } = usePage<PageProps<ProductsProps>>().props;
     const handleAddToCart = (productId: number) => {
         const { products } = usePage<PageProps<ProductsProps>>().props;
         // Retrieve current cart from local storage
@@ -124,12 +87,12 @@ export default function Welcome() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                     <h2 className="text-3xl font-bold text-gray-900 mb-8">Featured Products</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {featuredProducts.map((product) => (
+                        {products.map((product) => (
                             <div key={product.id} className="group">
                                 <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
                                     <img
                                         src={product.image}
-                                        alt={product.name}
+                                        alt={product.title}
                                         className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                                     />
                                     <button className="absolute bottom-4 right-4 p-2 rounded-full bg-white shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
@@ -137,7 +100,7 @@ export default function Welcome() {
                                     </button>
                                 </div>
                                 <div className="mt-4">
-                                    <h3 className="text-lg font-medium text-gray-900">{product.name}</h3>
+                                    <h3 className="text-lg font-medium text-gray-900">{product.title}</h3>
                                     <div className="flex items-center mt-1">
                                         <div className="flex items-center">
                                             {[...Array(5)].map((_, i) => (
