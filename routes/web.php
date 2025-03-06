@@ -31,24 +31,25 @@ Route::middleware('auth')->group(function () {
 Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.post');
 
-Route::prefix('admin')->middleware('auth')->group(function() {
+Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     /** USERS */
-    Route::prefix('users')->group(function() {
+    Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('admin.user.index');
         Route::post('/', [UserController::class, 'store'])->name('admin.user.store');
-        Route::put('/{user}', [UserController::class, 'update'])->name('admin.user.update');
+        Route::put('{user}', [UserController::class, 'update'])->name('admin.user.update');
     });
 
     /** PRODUCTS */
-    Route::prefix('products')->group(function() {
+    Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('admin.product.index');
         Route::post('/', [ProductController::class, 'store'])->name('admin.product.store');
+        Route::put('{product}', [ProductController::class, 'update'])->name('admin.product.update');
     });
 
     /**ORDERS */
     Route::apiResource('orders', OrderController::class);
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
