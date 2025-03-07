@@ -30,7 +30,7 @@ class DashboardController extends Controller
     public function showWelcomePage(): Response
     {
         return Inertia::render('Welcome', [
-            'products' => Product::all(),
+            'products' => Product::all()->take(4),
         ]);
     }
 
