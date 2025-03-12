@@ -12,11 +12,13 @@ type ProductData = {
     id: number,
     title: string,
     slug: string,
-    image: string,
+    image: null | File,
     description: string,
     price: string,
     published: boolean,
-    updated_at: string
+    updated_at: string,
+    ratings: string,
+    category: string,
 }
 
 type ProductsProps = {
@@ -27,7 +29,9 @@ const Index: React.FC = () => {
     const { products } = usePage<PageProps<ProductsProps>>().props;
     const [loading, setLoading] = useState(true);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [productsData, setProductsData] = useState<ProductData[]>([]);
+    const [currentEditProduct, setCurrentEditProduct] = useState<ProductData | null>(null);
     const columns = [
         {
             title: 'ID',
@@ -72,7 +76,7 @@ const Index: React.FC = () => {
             title: 'Action',
             key: 'action',
             render: (text: string, record: ProductData) => (
-                <Button onClick={() => console.log(record)}>Edit</Button>
+                <Button onClick={() => showEditModal(record)}>Edit</Button>
             ),
         },
     ]
@@ -113,11 +117,41 @@ const Index: React.FC = () => {
 
     const handleCancel = () => {
         setIsAddModalVisible(false);
+        setIsEditModalVisible(false);
         reset();
 
         /** Reset file input for image */
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
+        }
+    };
+
+    const showEditModal = (product: ProductData) => {
+        setCurrentEditProduct(product);
+        setData({
+            title: product.title,
+            image: product.image as File,
+            description: product.description,
+            price: product.price,
+            published: product.published,
+            category: product.category,
+            ratings: product.ratings,
+        });
+        setIsEditModalVisible(true);
+    };
+
+    const handleEditProduct = () => {
+        if (currentEditProduct) {
+            put(route('admin.product.update', currentEditProduct?.id), {
+                onSuccess: () => {
+                    reset();
+                    toast.success('User updated successfully!');
+                    setIsEditModalVisible(false);
+                },
+                onError: (errors) => {
+                    console.log('Validation errors:', errors);
+                }
+            });
         }
     };
 
@@ -157,6 +191,94 @@ const Index: React.FC = () => {
                     cancelText="Cancel"
                     width={1000}
                     maskClosable={false}
+                >
+                    <Form layout="vertical">
+                        <Form.Item
+                            label="Title"
+                            validateStatus={errors.title && 'error'}
+                            help={errors.title}
+                        >
+                            <Input
+                                value={data.title}
+                                onChange={(e) => setData('title', e.target.value)}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Image"
+                            validateStatus={errors.image && 'error'}
+                            help={errors.image}
+                        >
+                            <input
+                                type="file"
+                                accept="image/*"
+                                ref={fileInputRef}
+                                onChange={(e) => {
+                                    const file = e.target.files ? e.target.files[0] : null;
+                                    setData('image', file);
+                                }}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Description"
+                            validateStatus={errors.description && 'error'}
+                            help={errors.description}
+                        >
+                            <Input.TextArea
+                                placeholder="Enter description"
+                                value={data.description}
+                                onChange={(e) => setData('description', e.target.value)}
+                                rows={4}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Price"
+                            validateStatus={errors.price && 'error'}
+                            help={errors.price}
+                        >
+                            <Input
+                                value={data.price}
+                                onChange={(e) => setData('price', e.target.value)}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Ratings"
+                            validateStatus={errors.ratings && 'error'}
+                            help={errors.ratings}
+                        >
+                            <Input
+                                value={data.ratings}
+                                onChange={(e) => setData('ratings', e.target.value)}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Category"
+                            validateStatus={errors.category && 'error'}
+                            help={errors.category}
+                        >
+                            <Select
+                                options={Object.entries(Categories).map(([key, value]) => ({ label: key, value: value }))}
+                                value={data.category}
+                                onChange={(value) => setData('category', value)}
+                            />
+                        </Form.Item>
+                        <Checkbox
+                            checked={data.published}
+                            onChange={(e) => setData('published', e.target.checked)}
+                        >
+                            Published
+                        </Checkbox>
+                    </Form>
+                </Modal>
+
+                {/* Edit Product Modal */}
+                <Modal
+                    title="Edit Product"
+                    open={isEditModalVisible}
+                    onOk={handleEditProduct}
+                    onCancel={handleCancel}
+                    okText="Save"
+                    cancelText="Cancel"
+                    width={1000}
                 >
                     <Form layout="vertical">
                         <Form.Item
