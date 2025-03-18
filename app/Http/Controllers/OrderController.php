@@ -11,13 +11,14 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
     public function index()
     {
         $orders = Order::all();
-        return view('orders.index', compact('orders'));
+        return Inertia::render('orders.index', compact('orders'));
     }
 
     public function store(Request $request)
@@ -33,61 +34,61 @@ class OrderController extends Controller
         ]);
 
         // try {
-            DB::transaction(function () use ($request) {
-                $total_price = array_reduce($request->cart, function ($carry, $item) {
-                    return $carry + ($item['price'] * $item['quantity']);
-                }, 0);
+        DB::transaction(function () use ($request) {
+            $total_price = array_reduce($request->cart, function ($carry, $item) {
+                return $carry + ($item['price'] * $item['quantity']);
+            }, 0);
 
-                $order = Order::create([
-                    'total_price' => $total_price,
-                    'status' => 'pending',
-                    'created_by' => Auth::id(),
-                ]);
+            $order = Order::create([
+                'total_price' => $total_price,
+                'status' => 'pending',
+                'created_by' => Auth::id(),
+            ]);
 
-                OrderDetail::create([
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => Auth::user()->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'zipcode' => $request->zip,
+                'country_code' => 'PH',
+            ]);
+
+            collect($request->cart)->each(function ($item) use ($order) {
+                OrderItem::create([
                     'order_id' => $order->id,
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'email' => Auth::user()->email,
-                    'phone' => $request->phone,
-                    'address' => $request->address,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'zipcode' => $request->zip,
-                    'country_code' => 'PH',
-                ]);
-
-                collect($request->cart)->each(function($item) use ($order) {
-                    OrderItem::create([
-                        'order_id' => $order->id,
-                        'product_id' => $item['id'],
-                        'quantity' => $item['quantity'],
-                        'unit_price' => $item['price'],
-                    ]);
-                });
-
-                $customer = Customer::updateOrCreate(
-                    ['user_id' => Auth::id()],
-                    [
-                        'first_name' => $request->first_name,
-                        'last_name' => $request->last_name,
-                        'phone' => $request->phone,
-                        'user_id' => Auth::id(),
-                        'created_by' => Auth::id()
-                    ]
-                );
-
-                CustomerAddress::updateOrCreate(['customer_id' => $customer->id],[
-                    'customer_id' => $customer->id,
-                    'address' => $request->address,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'zipcode' => $request->zip,
-                    'country_code' => 'PH',
+                    'product_id' => $item['id'],
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['price'],
                 ]);
             });
 
-            return back()->with('success', 'Order successfully.');
+            $customer = Customer::updateOrCreate(
+                ['user_id' => Auth::id()],
+                [
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'phone' => $request->phone,
+                    'user_id' => Auth::id(),
+                    'created_by' => Auth::id()
+                ]
+            );
+
+            CustomerAddress::updateOrCreate(['customer_id' => $customer->id], [
+                'customer_id' => $customer->id,
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'zipcode' => $request->zip,
+                'country_code' => 'PH',
+            ]);
+        });
+
+        return back()->with('success', 'Order successfully.');
         // } catch (Exception $e) {
         //     return back()->with('error', 'Error processing order.');
         // }
