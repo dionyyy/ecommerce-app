@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
@@ -49,7 +50,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     });
 
     /**ORDERS */
-    Route::apiResource('orders', OrderController::class);
+    Route::resource('orders', AdminOrderController::class);
 });
 
 require __DIR__ . '/auth.php';
