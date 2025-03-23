@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,7 +16,7 @@ class OrderController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Order/Index', [
-            'orders' => Order::all()->with('orderDetails'),
+            'orders' => Order::with('orderDetails')->get(),
         ]);
     }
 
