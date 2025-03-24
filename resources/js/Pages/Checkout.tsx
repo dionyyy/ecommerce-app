@@ -127,11 +127,11 @@ const Checkout: React.FC = () => {
                             {errors.zip && <p className="text-red-600">{errors.zip}</p>}
                         </div>
                         <div className="mt-4">
-                            <h3 className="text-xl font-semibold text-gray-800  mt-10">Cart Summary</h3>
+                            <h3 className="text-xl font-semibold text-gray-800 mt-10">Cart Summary</h3>
                             <ul>
                                 {cartItems.map((item) => (
                                     <li key={item.id} className="border-b border-gray-200 py-2">
-                                        <p className='text-white'>{item.title} (x{item.quantity}) - ${item.price}</p>
+                                        <p className='text-gray-800'>{item.title} (x{item.quantity}) - ${item.price}</p>
                                     </li>
                                 ))}
                             </ul>
