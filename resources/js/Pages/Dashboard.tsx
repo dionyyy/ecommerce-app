@@ -1,11 +1,10 @@
-import ProductList from '@/Components/ProductList';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
 import { useState, useMemo, useEffect } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Head, Link, usePage } from '@inertiajs/react';
+import { PageProps } from '@/types';
 import { Star, Heart, SlidersHorizontal } from 'lucide-react';
+import { toast, ToastContainer } from 'react-toastify';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 type ProductData = {
     id: number,
