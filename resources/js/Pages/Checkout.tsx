@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Head, useForm } from '@inertiajs/react';
+import { toast, ToastContainer } from 'react-toastify';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 type CartItemData = {
     id: string;

@@ -1,11 +1,8 @@
-import { Head, router, usePage } from '@inertiajs/react';
-import ProductList from '@/Components/ProductList';
+import 'react-toastify/dist/ReactToastify.css';
+import { PageProps } from '@/types';
+import { router, usePage } from '@inertiajs/react';
 import { ShoppingCart, Heart, Search, ArrowRight, Star, Menu } from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react';
-import axios from 'axios';
-import { PageProps } from '@/types';
 
 type ProductData = {
     id: number;
