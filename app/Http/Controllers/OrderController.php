@@ -7,7 +7,6 @@ use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderItem;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
