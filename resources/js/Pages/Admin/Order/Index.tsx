@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react'
-import DataTable from '@/Components/DataTable'
-import AdminLayout from '@/Layouts/AdminLayout'
-import { PageProps } from '@/types'
-import { router, useForm, usePage } from '@inertiajs/react'
-import { Button, Checkbox, Form, Input, Modal, Select } from 'antd'
-import { toast, ToastContainer } from 'react-toastify';
+import React, { useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css';
-import { Categories } from '@/Utils/Constants/Transactions'
+import { Button } from 'antd'
+import { PageProps } from '@/types'
+import { router, usePage } from '@inertiajs/react'
+import { toast, ToastContainer } from 'react-toastify';
+import AdminLayout from '@/Layouts/AdminLayout'
+import DataTable from '@/Components/DataTable'
 
 type OrderData = {
     id: number;
@@ -43,7 +42,6 @@ type OrdersProps = {
 const Index: React.FC = () => {
     const { orders } = usePage<PageProps<OrdersProps>>().props;
     const [loading, setLoading] = useState(true);
-    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [ordersData, setOrdersData] = useState<OrderData[]>([]);
     const columns = [
         {
@@ -89,46 +87,7 @@ const Index: React.FC = () => {
                 <Button onClick={() => router.visit(`/orders/${record.id}`)}>View Details</Button>
             ),
         },
-    ]
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const { data, setData, post, errors, reset } = useForm({
-        title: '',
-        image: null as File | null,
-        description: '',
-        price: '',
-        published: false,
-        category: '',
-        ratings: '',
-    });
-
-    const showAddModal = () => {
-        setData({ title: '', image: null, description: '', price: '', published: false, category: '', ratings: '' });
-        setIsAddModalVisible(true);
-    };
-
-    const handleAddProduct = () => {
-        post(route('admin.product.store'), {
-            onSuccess: () => {
-                reset();
-                toast.success('Product added successfully!');
-                setIsAddModalVisible(false);
-
-                /** Reset file input for image */
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = '';
-                }
-            },
-            onError: (errors) => {
-                console.log('Validation errors:', errors);
-            }
-        });
-    };
-
-    const handleCancel = () => {
-        setIsAddModalVisible(false);
-        reset();
-    };
+    ];
 
     useEffect(() => {
         setLoading(true);
@@ -141,13 +100,6 @@ const Index: React.FC = () => {
             <div>
                 <div className="flex justify-between items-center">
                     <h1 className='my-10'>orders List</h1>
-                    <Button
-                        type="primary"
-                        style={{ marginRight: 10 }}
-                        onClick={showAddModal}
-                    >
-                        Add Order
-                    </Button>
                 </div>
                 <DataTable
                     columns={columns}
@@ -156,98 +108,10 @@ const Index: React.FC = () => {
                     pagination={{ pageSize: 5 }}
                     rowKey="id"
                 />
-
-                <Modal
-                    title="Add Order"
-                    open={isAddModalVisible}
-                    onOk={handleAddProduct}
-                    onCancel={handleCancel}
-                    okText="Add"
-                    cancelText="Cancel"
-                    width={1000}
-                    maskClosable={false}
-                >
-                    <Form layout="vertical">
-                        <Form.Item
-                            label="Title"
-                            validateStatus={errors.title && 'error'}
-                            help={errors.title}
-                        >
-                            <Input
-                                value={data.title}
-                                onChange={(e) => setData('title', e.target.value)}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label="Image"
-                            validateStatus={errors.image && 'error'}
-                            help={errors.image}
-                        >
-                            <input
-                                type="file"
-                                accept="image/*"
-                                ref={fileInputRef}
-                                onChange={(e) => {
-                                    const file = e.target.files ? e.target.files[0] : null;
-                                    setData('image', file);
-                                }}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label="Description"
-                            validateStatus={errors.description && 'error'}
-                            help={errors.description}
-                        >
-                            <Input.TextArea
-                                placeholder="Enter description"
-                                value={data.description}
-                                onChange={(e) => setData('description', e.target.value)}
-                                rows={4}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label="Price"
-                            validateStatus={errors.price && 'error'}
-                            help={errors.price}
-                        >
-                            <Input
-                                value={data.price}
-                                onChange={(e) => setData('price', e.target.value)}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label="Ratings"
-                            validateStatus={errors.ratings && 'error'}
-                            help={errors.ratings}
-                        >
-                            <Input
-                                value={data.ratings}
-                                onChange={(e) => setData('ratings', e.target.value)}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            label="Category"
-                            validateStatus={errors.category && 'error'}
-                            help={errors.category}
-                        >
-                            <Select
-                                options={Object.entries(Categories).map(([key, value]) => ({ label: key, value: value }))}
-                                value={data.category}
-                                onChange={(value) => setData('category', value)}
-                            />
-                        </Form.Item>
-                        <Checkbox
-                            checked={data.published}
-                            onChange={(e) => setData('published', e.target.checked)}
-                        >
-                            Published
-                        </Checkbox>
-                    </Form>
-                </Modal>
             </div>
             <ToastContainer />
         </AdminLayout>
     )
 }
 
-export default Index
+export default Index;
