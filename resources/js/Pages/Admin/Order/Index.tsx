@@ -1,46 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import { Button } from 'antd'
+import { OrderData } from '@/types/order';
 import { PageProps } from '@/types'
 import { router, usePage } from '@inertiajs/react'
 import { toast, ToastContainer } from 'react-toastify';
 import AdminLayout from '@/Layouts/AdminLayout'
 import DataTable from '@/Components/DataTable'
 
-type OrderData = {
-    id: number;
-    total_price: string;
-    status: string;
-    created_at: string;
-    updated_at: string;
-    created_by: number;
-    updated_by: number | null;
-    order_details: OrderDetails
-};
-
-type OrderDetails = {
-    id: number;
-    order_id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    address: string;
-    address2: string | null;
-    city: string;
-    state: string;
-    zipcode: string;
-    country_code: string;
-    created_at: string;
-    updated_at: string;
-};
-
-type OrdersProps = {
-    orders: OrderData[]
-}
-
 const Index: React.FC = () => {
-    const { orders } = usePage<PageProps<OrdersProps>>().props;
+    const { orders } = usePage<PageProps<{ orders: OrderData[] }>>().props;
     const [loading, setLoading] = useState(true);
     const [ordersData, setOrdersData] = useState<OrderData[]>([]);
     const columns = [
