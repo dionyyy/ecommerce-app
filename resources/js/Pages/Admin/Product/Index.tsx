@@ -1,32 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react'
-import DataTable from '@/Components/DataTable'
-import AdminLayout from '@/Layouts/AdminLayout'
-import { PageProps } from '@/types'
-import { useForm, usePage } from '@inertiajs/react'
-import { Button, Checkbox, Form, Input, Modal, Select } from 'antd'
-import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Button, Checkbox, Form, Input, Modal, Select } from 'antd'
 import { Categories } from '@/Utils/Constants/Transactions'
-
-type ProductData = {
-    id: number,
-    title: string,
-    slug: string,
-    image: null | File,
-    description: string,
-    price: string,
-    published: boolean,
-    updated_at: string,
-    ratings: string,
-    category: string,
-}
-
-type ProductsProps = {
-    products: ProductData[]
-}
+import { PageProps } from '@/types'
+import { ProductData } from '@/types/product'
+import { toast, ToastContainer } from 'react-toastify';
+import { useForm, usePage } from '@inertiajs/react'
+import AdminLayout from '@/Layouts/AdminLayout'
+import DataTable from '@/Components/DataTable'
 
 const Index: React.FC = () => {
-    const { products } = usePage<PageProps<ProductsProps>>().props;
+    const { products } = usePage<PageProps<{ products: ProductData[] }>>().props;
     const [loading, setLoading] = useState(true);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
