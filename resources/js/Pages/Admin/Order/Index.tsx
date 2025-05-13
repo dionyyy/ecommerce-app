@@ -68,7 +68,7 @@ const Index: React.FC = () => {
         <AdminLayout>
             <div>
                 <div className="flex justify-between items-center">
-                    <h1 className='my-10'>orders List</h1>
+                    <h1 className='my-10'>Orders List</h1>
                 </div>
                 <DataTable
                     columns={columns}
