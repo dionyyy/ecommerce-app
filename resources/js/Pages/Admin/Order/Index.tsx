@@ -53,7 +53,7 @@ const Index: React.FC = () => {
             title: 'Action',
             key: 'action',
             render: (text: string, record: OrderData) => (
-                <Button onClick={() => router.visit(`/orders/${record.id}`)}>View Details</Button>
+                <Button onClick={() => router.visit(route('orders.show', record.id))}>View Details</Button>
             ),
         },
     ];
