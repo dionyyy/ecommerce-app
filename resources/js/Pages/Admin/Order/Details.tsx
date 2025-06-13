@@ -1,10 +1,10 @@
 import React from 'react';
-import { ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { OrderData } from '@/types/order';
+import { PageProps } from '@/types';
+import { ToastContainer } from 'react-toastify';
 import { usePage } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
-import { PageProps } from '@/types';
-import { OrderData } from '@/types/order';
 
 const Details = () => {
     const { order } = usePage<PageProps<{ order: OrderData }>>().props;
