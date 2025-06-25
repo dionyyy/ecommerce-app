@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,7 +43,10 @@ class AdminController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Dashboard', [
-           'user' => Auth::user()
-        ]); 
+            'user' => Auth::user(),
+            'orders' => Order::all()->count(),
+            'products' => Product::all()->count(),
+            'customers' => Customer::all()->count()
+        ]);
     }
 }
