@@ -1,3 +1,5 @@
+import { ProductData } from "./product";
+
 export type OrderData = {
     id: number;
     total_price: string;
@@ -7,6 +9,14 @@ export type OrderData = {
     created_by: number;
     updated_by: number | null;
     order_details: OrderDetails
+    order_items: Array<{
+        id: number,
+        order_id: number,
+        product_id: number,
+        quantity: number,
+        unit_price: string,
+        product: ProductData
+    }>
 };
 
 export type OrderDetails = {
