@@ -46,6 +46,38 @@ const Details = () => {
                         </div>
                     </div>
                 </div>
+                {/* Order Items */}
+                <div className="mt-10 bg-white shadow-md rounded-2xl p-6 border">
+                    <h2 className="text-xl font-medium mb-4">Order Items</h2>
+                    {order.order_items && order.order_items.length > 0 ? (
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full text-sm text-left text-gray-700">
+                                <thead className="border-b font-medium">
+                                    <tr>
+                                        <th className="px-4 py-2">Product Name</th>
+                                        <th className="px-4 py-2">Quantity</th>
+                                        <th className="px-4 py-2">Unit Price</th>
+                                        <th className="px-4 py-2">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {order.order_items.map((item, index) => (
+                                        <tr key={index} className="border-b">
+                                            <td className="px-4 py-2">{item.product.title}</td>
+                                            <td className="px-4 py-2">{item.quantity}</td>
+                                            <td className="px-4 py-2">${item.product.price}</td>
+                                            <td className="px-4 py-2">
+                                                ${item.unit_price}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 text-sm">No order items available.</p>
+                    )}
+                </div>
             </div>
             <ToastContainer />
         </AdminLayout>
