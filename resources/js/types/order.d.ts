@@ -9,14 +9,7 @@ export type OrderData = {
     created_by: number;
     updated_by: number | null;
     order_details: OrderDetails
-    order_items: Array<{
-        id: number,
-        order_id: number,
-        product_id: number,
-        quantity: number,
-        unit_price: string,
-        product: ProductData
-    }>
+    order_items: Array<OrderItem>
 };
 
 export type OrderDetails = {
@@ -35,3 +28,13 @@ export type OrderDetails = {
     created_at: string;
     updated_at: string;
 };
+
+
+export type OrderItem = {
+    id: number,
+    order_id: number,
+    product_id: number,
+    quantity: number,
+    unit_price: string,
+    product: ProductData
+}
