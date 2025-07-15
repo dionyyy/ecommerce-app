@@ -1,13 +1,40 @@
-import React from 'react';
-import "react-toastify/dist/ReactToastify.css";
-import { OrderData } from '@/types/order';
-import { PageProps } from '@/types';
+import { Table } from 'antd';
 import { ToastContainer } from 'react-toastify';
+
+import { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
+import { OrderData, OrderItem } from '@/types/order';
+
+import "react-toastify/dist/ReactToastify.css";
 
 const Details = () => {
     const { order } = usePage<PageProps<{ order: OrderData }>>().props;
+
+    const rowsData = [
+        {
+            title: "Product Name",
+            dataIndex: ["product", "title"],
+            key: "productName",
+        },
+        {
+            title: "Quantity",
+            dataIndex: "quantity",
+            key: "quantity",
+        },
+        {
+            title: "Unit Price",
+            dataIndex: ["product", "price"],
+            key: "unitPrice",
+            render: (value: number) => `$${value.toFixed(2)}`,
+        },
+        {
+            title: "Subtotal",
+            dataIndex: "unit_price",
+            key: "subtotal",
+            render: (value: number) => `$${value.toFixed(2)}`,
+        },
+    ];
 
     return (
         <AdminLayout>
@@ -51,28 +78,11 @@ const Details = () => {
                     <h2 className="text-xl font-medium mb-4">Order Items</h2>
                     {order.order_items && order.order_items.length > 0 ? (
                         <div className="overflow-x-auto">
-                            <table className="min-w-full text-sm text-left text-gray-700">
-                                <thead className="border-b font-medium">
-                                    <tr>
-                                        <th className="px-4 py-2">Product Name</th>
-                                        <th className="px-4 py-2">Quantity</th>
-                                        <th className="px-4 py-2">Unit Price</th>
-                                        <th className="px-4 py-2">Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {order.order_items.map((item, index) => (
-                                        <tr key={index} className="border-b">
-                                            <td className="px-4 py-2">{item.product.title}</td>
-                                            <td className="px-4 py-2">{item.quantity}</td>
-                                            <td className="px-4 py-2">${item.product.price}</td>
-                                            <td className="px-4 py-2">
-                                                ${item.unit_price}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <Table
+                                columns={rowsData}
+                                dataSource={order.order_items}
+                                rowKey={(_: OrderItem, index?: number) => index ?? ""}
+                            />
                         </div>
                     ) : (
                         <p className="text-gray-500 text-sm">No order items available.</p>
