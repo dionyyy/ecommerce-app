@@ -17,7 +17,7 @@ class UserController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/User/Index', [
-            'users' => User::all()->filter(fn ($item) => !$item->isAdmin)->values()->toArray(),
+            'users' => User::all()->filter(fn($item) => !$item->isAdmin)->values()->toArray(),
         ]);
     }
 
