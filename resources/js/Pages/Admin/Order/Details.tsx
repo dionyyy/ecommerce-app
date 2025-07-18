@@ -1,5 +1,6 @@
 import { Table } from 'antd';
 import { ToastContainer } from 'react-toastify';
+import { Card, Col, Descriptions, Row, Typography } from "antd";
 
 import { PageProps } from '@/types';
 import { usePage } from '@inertiajs/react';
@@ -7,6 +8,8 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { OrderData, OrderItem } from '@/types/order';
 
 import "react-toastify/dist/ReactToastify.css";
+
+const { Title } = Typography;
 
 const Details = () => {
     const { order } = usePage<PageProps<{ order: OrderData }>>().props;
@@ -26,53 +29,64 @@ const Details = () => {
             title: "Unit Price",
             dataIndex: ["product", "price"],
             key: "unitPrice",
-            render: (value: number) => `$${value.toFixed(2)}`,
+            render: (value: string) => `$${Number(value).toFixed(2)}`
         },
         {
             title: "Subtotal",
             dataIndex: "unit_price",
             key: "subtotal",
-            render: (value: number) => `$${value.toFixed(2)}`,
+            render: (value: string) => `$${Number(value).toFixed(2)}`
         },
     ];
 
     return (
         <AdminLayout>
             <div className="px-6 py-10">
-                <h1 className="text-2xl font-semibold mb-6">Order Details</h1>
+                <Title level={3}>Order Details</Title>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Row gutter={[24, 24]}>
                     {/* Order Summary */}
-                    <div className="bg-white shadow-md rounded-2xl p-6 border">
-                        <h2 className="text-xl font-medium mb-4">Order Summary</h2>
-                        <div className="space-y-2 text-sm text-gray-700">
-                            <p><span className="font-medium">Order ID:</span> {order.id}</p>
-                            <p><span className="font-medium">Total Price:</span> ${order.total_price}</p>
-                            <p><span className="font-medium">Status:</span> {order.status}</p>
-                            <p><span className="font-medium">Created At:</span> {new Date(order.created_at).toLocaleString()}</p>
-                            <p><span className="font-medium">Updated At:</span> {new Date(order.updated_at).toLocaleString()}</p>
-                            <p><span className="font-medium">Created By:</span> {order.created_by}</p>
-                            {order.updated_by && (
-                                <p><span className="font-medium">Updated By:</span> {order.updated_by}</p>
-                            )}
-                        </div>
-                    </div>
+                    <Col xs={24} md={12}>
+                        <Card title="Order Summary" bordered>
+                            <Descriptions column={1} size="small">
+                                <Descriptions.Item label="Order ID">{order.id}</Descriptions.Item>
+                                <Descriptions.Item label="Total Price">${order.total_price}</Descriptions.Item>
+                                <Descriptions.Item label="Status">{order.status}</Descriptions.Item>
+                                <Descriptions.Item label="Created At">
+                                    {new Date(order.created_at).toLocaleString()}
+                                </Descriptions.Item>
+                                <Descriptions.Item label="Updated At">
+                                    {new Date(order.updated_at).toLocaleString()}
+                                </Descriptions.Item>
+                                <Descriptions.Item label="Created By">{order.created_by}</Descriptions.Item>
+                                {order.updated_by && (
+                                    <Descriptions.Item label="Updated By">{order.updated_by}</Descriptions.Item>
+                                )}
+                            </Descriptions>
+                        </Card>
+                    </Col>
 
                     {/* Customer Info */}
-                    <div className="bg-white shadow-md rounded-2xl p-6 border">
-                        <h2 className="text-xl font-medium mb-4">Customer Information</h2>
-                        <div className="space-y-2 text-sm text-gray-700">
-                            <p><span className="font-medium">Name:</span> {order.order_details.first_name} {order.order_details.last_name}</p>
-                            <p><span className="font-medium">Email:</span> {order.order_details.email}</p>
-                            <p><span className="font-medium">Phone:</span> {order.order_details.phone}</p>
-                            <p><span className="font-medium">Address:</span> {order.order_details.address}{order.order_details.address2 && `, ${order.order_details.address2}`}</p>
-                            <p><span className="font-medium">City:</span> {order.order_details.city}</p>
-                            <p><span className="font-medium">State:</span> {order.order_details.state}</p>
-                            <p><span className="font-medium">Zip Code:</span> {order.order_details.zipcode}</p>
-                            <p><span className="font-medium">Country Code:</span> {order.order_details.country_code}</p>
-                        </div>
-                    </div>
-                </div>
+                    <Col xs={24} md={12}>
+                        <Card title="Customer Information" bordered>
+                            <Descriptions column={1} size="small">
+                                <Descriptions.Item label="Name">
+                                    {order.order_details.first_name} {order.order_details.last_name}
+                                </Descriptions.Item>
+                                <Descriptions.Item label="Email">{order.order_details.email}</Descriptions.Item>
+                                <Descriptions.Item label="Phone">{order.order_details.phone}</Descriptions.Item>
+                                <Descriptions.Item label="Address">
+                                    {order.order_details.address}
+                                    {order.order_details.address2 && `, ${order.order_details.address2}`}
+                                </Descriptions.Item>
+                                <Descriptions.Item label="City">{order.order_details.city}</Descriptions.Item>
+                                <Descriptions.Item label="State">{order.order_details.state}</Descriptions.Item>
+                                <Descriptions.Item label="Zip Code">{order.order_details.zipcode}</Descriptions.Item>
+                                <Descriptions.Item label="Country Code">{order.order_details.country_code}</Descriptions.Item>
+                            </Descriptions>
+                        </Card>
+                    </Col>
+                </Row>
                 {/* Order Items */}
                 <div className="mt-10 bg-white shadow-md rounded-2xl p-6 border">
                     <h2 className="text-xl font-medium mb-4">Order Items</h2>
