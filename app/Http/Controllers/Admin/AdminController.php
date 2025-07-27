@@ -44,11 +44,19 @@ class AdminController extends Controller
      */
     public function index(): Response
     {
+        $now = Carbon::now();
+        $start = $now->copy()->startOfMonth();
+        $end = $now->copy()->endOfMonth();
+
         return Inertia::render('Admin/Dashboard/Dashboard', [
             'user' => Auth::user(),
-            'orders' => Order::all()->count(),
-            'products' => Product::all()->count(),
-            'customers' => Customer::all()->count()
+            'total_revenue_this_month' => Order::whereBetween('created_at', [$start, $end])
+                ->sum('total_price'),
+            'total_orders_this_month' => Order::whereBetween('created_at', [$start, $end])
+                ->count(),
+            'total_products_this_month' => Product::whereBetween('created_at', [$start, $end])
+                ->count(),
+            'total_customers' => Customer::count(),
         ]);
     }
 }
