@@ -26,7 +26,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
 
     const changeSymbol = {
         positive: '+',
-        negative: '',
+        negative: '-',
         neutral: ''
     }[changeType];
 
