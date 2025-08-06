@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -44,19 +45,70 @@ class AdminController extends Controller
      */
     public function index(): Response
     {
+        return Inertia::render('Admin/Dashboard/Dashboard', [
+            'metrics' => $this->getMetricSummary()
+        ]);
+    }
+
+    private function getMetricSummary(): array
+    {
         $now = Carbon::now();
+
+        // Current Month Range
         $start = $now->copy()->startOfMonth();
         $end = $now->copy()->endOfMonth();
 
-        return Inertia::render('Admin/Dashboard/Dashboard', [
-            'user' => Auth::user(),
-            'total_revenue_this_month' => Order::whereBetween('created_at', [$start, $end])
-                ->sum('total_price'),
-            'total_orders_this_month' => Order::whereBetween('created_at', [$start, $end])
-                ->count(),
-            'total_products_this_month' => Product::whereBetween('created_at', [$start, $end])
-                ->count(),
-            'total_customers' => Customer::count(),
-        ]);
+        // Previous Month Range
+        $prevStart = $now->copy()->subMonth()->startOfMonth();
+        $prevEnd = $now->copy()->subMonth()->endOfMonth();
+
+        // Current month metrics
+        $currentRevenue = Order::whereBetween('created_at', [$start, $end])->sum('total_price');
+        $currentOrders = Order::whereBetween('created_at', [$start, $end])->count();
+        $currentProducts = Product::whereBetween('created_at', [$start, $end])->count();
+        $currentCustomers = Customer::count();
+
+        // Previous month metrics
+        $prevRevenue = Order::whereBetween('created_at', [$prevStart, $prevEnd])->sum('total_price');
+        $prevOrders = Order::whereBetween('created_at', [$prevStart, $prevEnd])->count();
+        $prevProducts = Product::whereBetween('created_at', [$prevStart, $prevEnd])->count();
+        $prevCustomers = Customer::count();
+
+        // Helper to calculate change %
+        $calculateChange = function ($current, $previous) {
+            if ($previous == 0) {
+                return [
+                    'change' => $current > 0 ? 100 : 0,
+                    'type' => $current > 0 ? 'positive' : 'neutral'
+                ];
+            }
+
+            $diff = $current - $previous;
+            $percentage = round(($diff / $previous) * 100, 2);
+
+            return [
+                'change' => abs($percentage),
+                'type' => $percentage > 0 ? 'positive' : ($percentage < 0 ? 'negative' : 'neutral')
+            ];
+        };
+
+        return [
+            'total_revenue_this_month' => [
+                'value' => $currentRevenue,
+                ...$calculateChange($currentRevenue, $prevRevenue)
+            ],
+            'total_orders_this_month' => [
+                'value' => $currentOrders,
+                ...$calculateChange($currentOrders, $prevOrders)
+            ],
+            'total_products_this_month' => [
+                'value' => $currentProducts,
+                ...$calculateChange($currentProducts, $prevProducts)
+            ],
+            'total_customers' => [
+                'value' => $currentCustomers,
+                ...$calculateChange($currentCustomers, $prevCustomers)
+            ]
+        ];
     }
 }
