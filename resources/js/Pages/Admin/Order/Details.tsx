@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Select, Table } from 'antd';
 import { ToastContainer } from 'react-toastify';
 import { Card, Col, Descriptions, Row, Typography } from "antd";
 
@@ -51,7 +51,20 @@ const Details = () => {
                             <Descriptions column={1} size="small">
                                 <Descriptions.Item label="Order ID">{order.id}</Descriptions.Item>
                                 <Descriptions.Item label="Total Price">${order.total_price}</Descriptions.Item>
-                                <Descriptions.Item label="Status">{order.status}</Descriptions.Item>
+                                <Descriptions.Item label="Status">
+                                    <Select
+                                        defaultValue={order.status}
+                                        style={{ width: 120 }}
+                                        onChange={() => {
+
+                                        }}
+                                        options={[
+                                            { value: 'pending', label: 'pending' },
+                                            { value: 'complete', label: 'complete' },
+                                            { value: 'cancel', label: 'cancel' },
+                                        ]}
+                                    />
+                                </Descriptions.Item>
                                 <Descriptions.Item label="Created At">
                                     {new Date(order.created_at).toLocaleString()}
                                 </Descriptions.Item>
