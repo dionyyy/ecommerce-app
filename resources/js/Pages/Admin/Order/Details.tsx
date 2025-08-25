@@ -70,18 +70,16 @@ const Details = () => {
                                 <Descriptions.Item label="Order ID">{order.id}</Descriptions.Item>
                                 <Descriptions.Item label="Total Price">${order.total_price}</Descriptions.Item>
                                 <Descriptions.Item label="Status">
-                                    <div className="flex items-center gap-3">
-                                        <Select
-                                            value={status}
-                                            style={{ width: 160 }}
-                                            onChange={(value) => setStatus(value)}
-                                            options={[
-                                                { value: OrderStatus.PENDING, label: OrderStatus.PENDING },
-                                                { value: OrderStatus.COMPLETE, label: OrderStatus.COMPLETE },
-                                                { value: OrderStatus.CANCEL, label: OrderStatus.CANCEL },
-                                            ]}
-                                        />
-                                    </div>
+                                    <Select
+                                        value={status}
+                                        style={{ width: 160 }}
+                                        onChange={(value) => setStatus(value)}
+                                        options={[
+                                            { value: OrderStatus.PENDING, label: OrderStatus.PENDING },
+                                            { value: OrderStatus.COMPLETE, label: OrderStatus.COMPLETE },
+                                            { value: OrderStatus.CANCEL, label: OrderStatus.CANCEL },
+                                        ]}
+                                    />
                                 </Descriptions.Item>
                                 <Descriptions.Item label="Created At">
                                     {new Date(order.created_at).toLocaleString()}
