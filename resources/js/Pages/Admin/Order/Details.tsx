@@ -1,18 +1,21 @@
-import { Select, Table } from 'antd';
-import { ToastContainer } from 'react-toastify';
+import { Select, Table, Button } from 'antd';
+import { ToastContainer, toast } from 'react-toastify';
 import { Card, Col, Descriptions, Row, Typography } from "antd";
 
 import { PageProps } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { OrderData, OrderItem } from '@/types/order';
 
 import "react-toastify/dist/ReactToastify.css";
+import { OrderStatus } from '@/Utils/Constants/Order';
+import { useState } from 'react';
 
 const { Title } = Typography;
 
 const Details = () => {
     const { order } = usePage<PageProps<{ order: OrderData }>>().props;
+    const [status, setStatus] = useState(order.status);
 
     const rowsData = [
         {
@@ -39,6 +42,21 @@ const Details = () => {
         },
     ];
 
+    const handleUpdate = () => {
+        router.put(
+            route("admin.orders.update", order.id),
+            { status },
+            {
+                onSuccess: () => {
+                    toast.success("Order status updated successfully!");
+                },
+                onError: () => {
+                    toast.error("Failed to update order status.");
+                }
+            }
+        );
+    };
+
     return (
         <AdminLayout>
             <div className="px-6 py-10">
@@ -53,15 +71,13 @@ const Details = () => {
                                 <Descriptions.Item label="Total Price">${order.total_price}</Descriptions.Item>
                                 <Descriptions.Item label="Status">
                                     <Select
-                                        defaultValue={order.status}
-                                        style={{ width: 120 }}
-                                        onChange={() => {
-
-                                        }}
+                                        value={status}
+                                        style={{ width: 160 }}
+                                        onChange={(value) => setStatus(value)}
                                         options={[
-                                            { value: 'pending', label: 'pending' },
-                                            { value: 'complete', label: 'complete' },
-                                            { value: 'cancel', label: 'cancel' },
+                                            { value: OrderStatus.PENDING, label: OrderStatus.PENDING },
+                                            { value: OrderStatus.COMPLETE, label: OrderStatus.COMPLETE },
+                                            { value: OrderStatus.CANCEL, label: OrderStatus.CANCEL },
                                         ]}
                                     />
                                 </Descriptions.Item>
@@ -76,6 +92,12 @@ const Details = () => {
                                     <Descriptions.Item label="Updated By">{order.updated_by}</Descriptions.Item>
                                 )}
                             </Descriptions>
+                            <Button
+                                type="primary"
+                                onClick={handleUpdate}
+                            >
+                                Update
+                            </Button>
                         </Card>
                     </Col>
 
