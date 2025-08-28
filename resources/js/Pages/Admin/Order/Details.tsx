@@ -16,6 +16,7 @@ const { Title } = Typography;
 const Details = () => {
     const { order } = usePage<PageProps<{ order: OrderData }>>().props;
     const [status, setStatus] = useState(order.status);
+    const [loading, setLoading] = useState(false);
 
     const rowsData = [
         {
@@ -43,15 +44,18 @@ const Details = () => {
     ];
 
     const handleUpdate = () => {
+        setLoading(true);
         router.put(
             route("admin.orders.update", order.id),
             { status },
             {
                 onSuccess: () => {
                     toast.success("Order status updated successfully!");
+                    setLoading(false);
                 },
                 onError: () => {
                     toast.error("Failed to update order status.");
+                    setLoading(false);
                 }
             }
         );
@@ -95,6 +99,7 @@ const Details = () => {
                             <Button
                                 type="primary"
                                 onClick={handleUpdate}
+                                loading={loading}
                             >
                                 Update
                             </Button>
