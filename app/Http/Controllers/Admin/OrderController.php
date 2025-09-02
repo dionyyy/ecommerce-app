@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -57,9 +58,16 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Order $order): RedirectResponse
     {
-        //
+        $request->validate([
+            "status" => ["required", Rule::enum()],
+        ]);
+
+        $order->status = $request->status;
+        $order->save();
+
+        return back()->with('success', 'User updated successfully.');
     }
 
     /**
