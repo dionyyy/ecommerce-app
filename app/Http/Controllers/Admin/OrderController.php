@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
@@ -61,7 +62,7 @@ class OrderController extends Controller
     public function update(Request $request, Order $order): RedirectResponse
     {
         $request->validate([
-            "status" => ["required", Rule::enum()],
+            "status" => ["required", Rule::enum(OrderStatus::class)],
         ]);
 
         $order->status = $request->status;
