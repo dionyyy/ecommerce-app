@@ -68,7 +68,7 @@ class OrderController extends Controller
         $order->status = $request->status;
         $order->save();
 
-        return back()->with('success', 'User updated successfully.');
+        return back()->with('success', 'Order details updated successfully.');
     }
 
     /**
