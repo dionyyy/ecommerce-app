@@ -46,7 +46,8 @@ class AdminController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Dashboard/Dashboard', [
-            'metrics' => $this->getMetricSummary()
+            'metrics' => $this->getMetricSummary(),
+            'sales' => $this->getMonthlySalesData(),
         ]);
     }
 
@@ -110,5 +111,29 @@ class AdminController extends Controller
                 ...$calculateChange($currentCustomers, $prevCustomers)
             ]
         ];
+    }
+
+    private function getMonthlySalesData(): array
+    {
+        $rawSales = Order::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as ym, SUM(total_price) as sales')
+            ->where('created_at', '>=', Carbon::now()->subMonths(11)->startOfMonth())
+            ->groupBy('ym')
+            ->orderBy('ym')
+            ->pluck('sales', 'ym');
+
+        $period = collect();
+        $start = Carbon::now()->subMonths(11)->startOfMonth();
+        $end = Carbon::now()->startOfMonth();
+
+        while ($start <= $end) {
+            $ym = $start->format('Y-m');
+            $period->push([
+                'month' => $start->format('M'),
+                'sales' => (int) ($rawSales[$ym] ?? 0),
+            ]);
+            $start->addMonth();
+        }
+
+        return $sales = $period->toArray();
     }
 }
