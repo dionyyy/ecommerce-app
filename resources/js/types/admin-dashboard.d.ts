@@ -10,3 +10,8 @@ export type Metrics = {
     total_products_this_month: MetricItem;
     total_customers: MetricItem;
 };
+
+export type SalesData = {
+    month: string;
+    sales: number;
+}
