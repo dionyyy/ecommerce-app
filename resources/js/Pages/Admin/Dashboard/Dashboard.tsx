@@ -3,16 +3,20 @@ import AdminLayout from "@/Layouts/AdminLayout";
 import MetricCard from "./Components/MetricCard";
 import { usePage } from "@inertiajs/react";
 import { PageProps } from "@/types";
-import type { Metrics } from "@/types/admin-dashboard";
+import type { Metrics, SalesData } from "@/types/admin-dashboard";
 import {
   DollarSign,
   ShoppingCart,
   Package,
   Users
 } from "lucide-react";
+import { Col, Row } from "antd";
+import SalesChart from "./Components/SalesChart";
+import QuickActions from "./Components/QuickActions";
 
 const Dashboard: React.FC = () => {
   const { metrics } = usePage<PageProps<{ metrics: Metrics }>>().props;
+  const { sales } = usePage<PageProps<{ sales: SalesData[] }>>().props;
 
   const getChangeType = (value: number): "positive" | "negative" | "neutral" => {
     if (value > 0) return "positive";
@@ -57,19 +61,28 @@ const Dashboard: React.FC = () => {
 
   return (
     <AdminLayout>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         {metricCards.map((metric, index) => (
-          <MetricCard
-            key={index}
-            title={metric.title}
-            value={metric.value}
-            change={metric.change}
-            changeType={metric.changeType}
-            icon={metric.icon}
-            color={metric.color}
-          />
+          <Col xs={24} sm={12} lg={6} key={index}>
+            <MetricCard
+              title={metric.title}
+              value={metric.value}
+              change={metric.change}
+              changeType={metric.changeType}
+              icon={metric.icon}
+              color={metric.color}
+            />
+          </Col>
         ))}
-      </div>
+      </Row>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={24} lg={16}>
+          <SalesChart data={sales} />
+        </Col>
+        <Col xs={24} lg={8}>
+          <QuickActions />
+        </Col>
+      </Row>
 
       <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
     </AdminLayout>
