@@ -116,13 +116,13 @@ class AdminController extends Controller
     private function getMonthlySalesData(): array
     {
         $rawSales = Order::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as ym, SUM(total_price) as sales')
-            ->where('created_at', '>=', Carbon::now()->subMonths(11)->startOfMonth())
+            ->where('created_at', '>=', Carbon::now()->subMonths(5)->startOfMonth())
             ->groupBy('ym')
             ->orderBy('ym')
             ->pluck('sales', 'ym');
 
         $period = collect();
-        $start = Carbon::now()->subMonths(11)->startOfMonth();
+        $start = Carbon::now()->subMonths(5)->startOfMonth();
         $end = Carbon::now()->startOfMonth();
 
         while ($start <= $end) {
