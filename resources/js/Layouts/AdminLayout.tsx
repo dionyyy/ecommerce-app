@@ -67,7 +67,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
         <Layout style={{ minHeight: '100vh' }}>
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} width={300}>
                 <div className="py-6 demo-logo-vertical">
-                    <h2 className="text-center">Admin Panel</h2>
+                    <h2 className="text-center text-white">Admin Panel</h2>
                 </div>
                 <Menu
                     theme="dark"
