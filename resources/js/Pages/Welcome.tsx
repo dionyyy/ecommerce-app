@@ -24,14 +24,6 @@ type ProductsProps = {
 
 export default function Welcome() {
     const { products } = usePage<PageProps<ProductsProps>>().props;
-    const handleAddToCart = (productId: number) => {
-        const { products } = usePage<PageProps<ProductsProps>>().props;
-        // Retrieve current cart from local storage
-        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-        cart.push(productId);
-        localStorage.setItem("cart", JSON.stringify(cart));
-        toast.success("Successfully added to cart");
-    };
 
     return (
         <>
@@ -50,7 +42,7 @@ export default function Welcome() {
                                 <Heart className="h-6 w-6 text-gray-600" />
                                 <ShoppingCart className="h-6 w-6 text-gray-600" />
                                 <a href="/login" className="text-gray-700 hover:text-gray-900">Sign in</a>
-                                <a href="#" className="text-gray-700 hover:text-gray-900">Sign up</a>
+                                <a href="/register" className="text-gray-700 hover:text-gray-900">Sign up</a>
                             </div>
                         </div>
                     </div>
@@ -114,7 +106,7 @@ export default function Welcome() {
                                         <span className="ml-2 text-sm text-gray-500">{product.rating}</span>
                                     </div>
                                     <p className="mt-1 text-lg font-semibold text-gray-900">${product.price}</p>
-                                    <button onClick={() => handleAddToCart(product.id)} className="mt-4 w-full bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
+                                    <button onClick={() => router.visit("login")} className="mt-4 w-full bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors">
                                         Add to Cart
                                     </button>
                                 </div>
