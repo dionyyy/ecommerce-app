@@ -1,18 +1,17 @@
 import React from "react";
-import AdminLayout from "@/Layouts/AdminLayout";
-import MetricCard from "./Components/MetricCard";
-import { usePage } from "@inertiajs/react";
-import { PageProps } from "@/types";
-import type { Metrics, SalesData } from "@/types/admin-dashboard";
-import {
-  DollarSign,
-  ShoppingCart,
-  Package,
-  Users
-} from "lucide-react";
+
 import { Col, Row } from "antd";
+import { DollarSign, Package, ShoppingCart, Users } from "lucide-react";
+
+import { PageProps } from "@/types";
+import { usePage } from "@inertiajs/react";
+import AdminLayout from "@/Layouts/AdminLayout";
+import type { Metrics, SalesData } from "@/types/admin-dashboard";
+
+import MetricCard from "./Components/MetricCard";
 import SalesChart from "./Components/SalesChart";
 import QuickActions from "./Components/QuickActions";
+import RecentOrders from "./Components/RecentOrders";
 
 const Dashboard: React.FC = () => {
   const { metrics } = usePage<PageProps<{ metrics: Metrics }>>().props;
@@ -84,8 +83,12 @@ const Dashboard: React.FC = () => {
         </Col>
       </Row>
 
-      <div className="border-2 border-dashed rounded-lg border-gray-300 dark:border-gray-600 h-96 mb-4"></div>
-    </AdminLayout>
+      <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+        <Col xs={24}>
+          <RecentOrders />
+        </Col>
+      </Row>
+    </AdminLayout >
   );
 };
 
