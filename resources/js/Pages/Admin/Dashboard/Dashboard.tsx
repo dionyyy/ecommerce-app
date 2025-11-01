@@ -12,10 +12,12 @@ import MetricCard from "./Components/MetricCard";
 import SalesChart from "./Components/SalesChart";
 import QuickActions from "./Components/QuickActions";
 import RecentOrders from "./Components/RecentOrders";
+import { type OrderData } from "@/types/order";
 
 const Dashboard: React.FC = () => {
   const { metrics } = usePage<PageProps<{ metrics: Metrics }>>().props;
   const { sales } = usePage<PageProps<{ sales: SalesData[] }>>().props;
+  const { orders } = usePage<PageProps<{ orders: OrderData[] }>>().props;
 
   const getChangeType = (value: number): "positive" | "negative" | "neutral" => {
     if (value > 0) return "positive";
@@ -85,7 +87,7 @@ const Dashboard: React.FC = () => {
 
       <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
         <Col xs={24}>
-          <RecentOrders />
+          <RecentOrders orders={orders} />
         </Col>
       </Row>
     </AdminLayout >
