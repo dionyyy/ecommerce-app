@@ -48,6 +48,7 @@ class AdminController extends Controller
         return Inertia::render('Admin/Dashboard/Dashboard', [
             'metrics' => $this->getMetricSummary(),
             'sales' => $this->getMonthlySalesData(),
+            'orders' => Order::with(['orderDetails', 'orderItems.product'])->latest()->take(5)->get(),
         ]);
     }
 
