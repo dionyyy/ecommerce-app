@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
     DesktopOutlined,
+    DownOutlined,
     FileOutlined,
     PieChartOutlined,
     TeamOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { Link as InertiaLink, usePage } from '@inertiajs/react';
+import { Avatar, Breadcrumb, Button, Dropdown, Layout, Menu, MenuProps, Space, theme } from 'antd';
+import { Link as InertiaLink, router, usePage } from '@inertiajs/react';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -16,7 +17,7 @@ type AdminLayoutProps = {
     user?: { name: string; email: string };
 }
 
-const items = [
+const menuItems = [
     { key: '/admin/dashboard', icon: <PieChartOutlined />, label: <InertiaLink href="/admin/dashboard">Dashboard</InertiaLink> },
     { key: '/admin/products', icon: <DesktopOutlined />, label: <InertiaLink href="/admin/products">Products</InertiaLink> },
     { key: '/admin/orders', icon: <FileOutlined />, label: <InertiaLink href="/admin/orders">Orders</InertiaLink> },
@@ -40,6 +41,19 @@ const items = [
     },
 ];
 
+const items: MenuProps['items'] = [
+    {
+        key: '1',
+        label: (
+            <a onClick={() => {
+                router.post(route('logout'));
+            }}>
+                Logout
+            </a>
+        ),
+    },
+];
+
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     const user = usePage().props.auth.user;
     const [collapsed, setCollapsed] = useState(false);
@@ -50,7 +64,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
     useEffect(() => {
         const path = window.location.pathname;
-        const parentKey = items.find(item =>
+        const parentKey = menuItems.find(item =>
             item.children?.some(child => child.key === path)
         )?.key;
 
@@ -73,7 +87,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                     theme="dark"
                     defaultSelectedKeys={['/admin/dashboard']}
                     mode="inline"
-                    items={items}
+                    items={menuItems}
                     selectedKeys={[window.location.pathname]}
                     openKeys={openKeys}
                     onOpenChange={onOpenChange}
@@ -83,9 +97,15 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                 <Header style={{ padding: 0, background: colorBgContainer }}>
                     <div className="flex justify-between items-center px-4">
                         <h2 className="text-lg"></h2>
-                        <div>
-                            <span className="mr-4">Welcome, {user?.name}</span>
-                        </div>
+                        <Dropdown menu={{ items }} trigger={['click']}>
+                            <a onClick={(e) => e.preventDefault()}>
+                                <Space style={{ cursor: 'pointer' }}>
+                                    <Avatar icon={<UserOutlined />} />
+                                    <span style={{ fontWeight: 500 }}>{user?.name}</span>
+                                    <DownOutlined />
+                                </Space>
+                            </a>
+                        </Dropdown>
                     </div>
                 </Header>
                 <Content style={{ margin: '0 16px' }}>
