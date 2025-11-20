@@ -1,8 +1,10 @@
 import React from 'react';
 import { Card, Table, Tag, Button, Space } from 'antd';
-import { EyeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EyeOutlined } from '@ant-design/icons';
 import { OrderData } from '@/types/order';
 import { OrderStatus } from '@/Utils/Constants/Order';
+import { formatAmount } from '@/Utils/Helpers';
+import { router } from '@inertiajs/react';
 
 const RecentOrders: React.FC<{ orders: OrderData[] }> = ({ orders }) => {
     const getStatusColor = (status: string) => {
@@ -34,12 +36,19 @@ const RecentOrders: React.FC<{ orders: OrderData[] }> = ({ orders }) => {
             title: 'Product',
             dataIndex: 'product',
             key: 'product',
+            render: (_: unknown, record: OrderData) => (
+                <ul className="list-disc pl-4">
+                    {record.order_items.map((item) => (
+                        <li key={item.id}>{`${item.product.title} - x${item.quantity}`}</li>
+                    ))}
+                </ul>
+            ),
         },
         {
             title: 'Amount',
             dataIndex: 'total_price',
             key: 'total_price',
-            render: (total_price: number) => `$${total_price.toFixed(2)}`,
+            render: (total_price: string) => `$${formatAmount(total_price)}`,
         },
         {
             title: 'Status',
@@ -57,8 +66,6 @@ const RecentOrders: React.FC<{ orders: OrderData[] }> = ({ orders }) => {
             render: () => (
                 <Space>
                     <Button type="text" icon={<EyeOutlined />} size="small" />
-                    <Button type="text" icon={<EditOutlined />} size="small" />
-                    <Button type="text" icon={<DeleteOutlined />} size="small" danger />
                 </Space>
             ),
         },
@@ -67,7 +74,7 @@ const RecentOrders: React.FC<{ orders: OrderData[] }> = ({ orders }) => {
     return (
         <Card
             title="Recent Orders"
-            extra={<Button type="link">View All</Button>}
+            extra={<Button onClick={() => router.visit("/admin/orders")} > View All</Button >}
         >
             <Table
                 columns={columns}
