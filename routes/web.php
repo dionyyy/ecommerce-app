@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
@@ -51,6 +52,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
     /**ORDERS */
     Route::resource('orders', AdminOrderController::class);
+
+    /**CUSTOMERS  */
+    Route::prefix('customers')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('admin.customers.index');
+    });
 });
 
 require __DIR__ . '/auth.php';
