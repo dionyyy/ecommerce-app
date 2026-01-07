@@ -6,12 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { PageProps } from '@/types';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-type UserData = {
-    id: number;
-    name: string;
-    email: string;
-};
+import { UserData } from '@/types/user';
 
 type Props = {
     users: UserData[];
